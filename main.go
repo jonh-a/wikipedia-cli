@@ -22,30 +22,30 @@ func main() {
 	searchValue := *searchFlag
 	showFullArticle := *fullArticleFlag
 
+	article, err := getSummary(formatSearchTerm(searchValue))
+	if err.Error {
+		log.Fatalln(err.Detail)
+		os.Exit(1)
+	}
+
 	if showFullArticle {
-		fullArticle, err := getFullArticle(formatSearchTerm(searchValue))
+		fullArticle, err := getFullArticle(article.Pageid)
+
 		if err.Error {
-			fmt.Println(err.Detail)
+			log.Fatalln(err.Detail)
 			os.Exit(1)
 		}
 
-		out, rErr := glamour.Render(fullArticle, "dark")
+		out, renderErr := glamour.Render(fullArticle, "dark")
 
-		if rErr != nil {
-			log.Fatal(rErr)
+		if renderErr != nil {
+			log.Fatal(renderErr)
 		}
 
 		fmt.Print(out)
 		os.Exit(0)
 	}
 
-	if !showFullArticle {
-		article, err := getSummary(formatSearchTerm(searchValue))
-		if err.Error {
-			fmt.Println(err.Detail)
-			os.Exit(1)
-		}
-
-		fmt.Println(article.Extract)
-	}
+	fmt.Print(article.Extract)
+	os.Exit(0)
 }

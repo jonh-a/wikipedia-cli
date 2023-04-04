@@ -56,8 +56,8 @@ func getExtract(a map[string]interface{}) (string, error) {
 	return md, nil
 }
 
-func getFullArticle(search string) (string, SearchError) {
-	url := fmt.Sprintf("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&titles=%s&exsectionformat=wiki", search)
+func getFullArticle(pageid int64) (string, SearchError) {
+	url := fmt.Sprintf("https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&pageids=%d&exsectionformat=wiki", pageid)
 
 	resp, err := http.Get(url)
 	if err != nil {

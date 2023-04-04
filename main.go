@@ -3,8 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"strings"
+
+	"github.com/charmbracelet/glamour"
 )
 
 func formatSearchTerm(search string) string {
@@ -26,7 +29,13 @@ func main() {
 			os.Exit(1)
 		}
 
-		fmt.Println(fullArticle)
+		out, rErr := glamour.Render(fullArticle, "dark")
+
+		if rErr != nil {
+			log.Fatal(rErr)
+		}
+
+		fmt.Print(out)
 		os.Exit(0)
 	}
 

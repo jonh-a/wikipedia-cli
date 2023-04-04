@@ -3,17 +3,23 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
+	md "github.com/JohannesKaufmann/html-to-markdown"
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/russross/blackfriday/v2"
 )
 
 func convertToMarkdown(input string) string {
 	policy := bluemonday.UGCPolicy()
 	html := policy.Sanitize(input)
+	converter := md.NewConverter("", true, nil)
 
-	md := blackfriday.Run([]byte(html))
+	md, err := converter.ConvertString(html)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	return string(md)
 }
